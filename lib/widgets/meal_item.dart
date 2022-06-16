@@ -5,15 +5,20 @@ import '../models/meals.dart';
 import '../screens/meals_detail_screen.dart';
 
 class MealItem extends StatelessWidget{
+  final String id;
   final String title;
   final String iMageUrl;
   final int duration;
   final Complexity coMplexity;
   final Affordability affordability;
-  MealItem({required this.title, required this.iMageUrl, required this.duration, required this.coMplexity, required this.affordability});
+  MealItem({required this.title, required this.iMageUrl, required this.duration,
+    required this.coMplexity,
+    required this.affordability,
+  required this.id
+  });
 
   void selectMeal(BuildContext context){
-    Navigator.of(context).pushNamed(MealDetail.routeNaMe, arguments: {"MealTitle" : title});
+    Navigator.of(context).pushNamed(MealDetail.routeNaMe, arguments: {"title" : title, "id" : id});
   }
   String get coMplexityText{
     switch(coMplexity){

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_meals_app/screens/meals_detail_screen.dart';
+import 'package:flutter_meals_app/screens/tabs_screen.dart';
 import 'screens/categories_screen.dart';
 
 import 'screens/categories_meals_screen.dart';
@@ -34,12 +35,7 @@ class MyApp extends StatelessWidget {
             ),
             ),
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Resturaunt app"),
-        ),
-        body: CategoriesScreen(),
-      ),
+      home: TabsScreen(),
          // This trailing comma makes auto-formatting nicer for build methods.
 
       routes: {
@@ -50,6 +46,19 @@ class MyApp extends StatelessWidget {
           return MealDetail();
         }
     },
+      onGenerateRoute: (settings){
+        print(settings.name);
+        return MaterialPageRoute(builder: (context){
+          return CategoriesScreen();
+        });
+      },
+      onUnknownRoute: (settings){
+        return MaterialPageRoute(
+          builder: (context){
+            return CategoriesScreen();
+          }
+        );
+      },
     );
   }
 }

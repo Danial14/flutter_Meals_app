@@ -6,7 +6,7 @@ class CategoriesScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return
-      GridView(
+    GridView(
       padding: const EdgeInsets.all(25),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
       maxCrossAxisExtent: 200,
