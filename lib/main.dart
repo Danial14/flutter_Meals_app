@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_meals_app/screens/filter_screen.dart';
 import 'package:flutter_meals_app/screens/meals_detail_screen.dart';
 import 'package:flutter_meals_app/screens/tabs_screen.dart';
+import 'package:flutter_meals_app/widgets/main_drawer.dart';
 import 'screens/categories_screen.dart';
 
 import 'screens/categories_meals_screen.dart';
@@ -35,15 +37,21 @@ class MyApp extends StatelessWidget {
             ),
             ),
       ),
-      home: TabsScreen(),
+
          // This trailing comma makes auto-formatting nicer for build methods.
 
       routes: {
+        "/" : (context){
+          return TabsScreen();
+        },
         CategoriesMeals.routeNaMe : (context){
         return CategoriesMeals();
       },
         MealDetail.routeNaMe : (context){
           return MealDetail();
+        },
+        FilterScreen.routeNaMe : (context){
+          return FilterScreen(drawer: MainDrawer(),);
         }
     },
       onGenerateRoute: (settings){
