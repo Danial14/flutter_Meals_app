@@ -16,6 +16,7 @@ class CategoriesScreenState extends State<CategoriesMeals>{
   late String title;
   late String id;
   late List<Meal> categoryMeals;
+  Map<String, bool>? filters = null;
   /*@override
   void initState() {
     super.initState();
@@ -40,13 +41,65 @@ class CategoriesScreenState extends State<CategoriesMeals>{
         title: Text(title),
       ),
       body: ListView.builder(itemBuilder: (context, index){
-        return MealItem(title: categoryMeals[index].title, iMageUrl: categoryMeals[index].imageUrl,
-          duration: categoryMeals[index].duration,
-          coMplexity: categoryMeals[index].complexity,
-          affordability: categoryMeals[index].affordability,
-          id: categoryMeals[index].id,
-          reMoveIteM: reMoveMeal,
-        );
+        if(filters!["isGlutenFree"] == false && filters!["isLactoseFree"] == false && filters!["isVeganFree"] == false && filters!["isVegetrationFree"] == false){
+          return
+            MealItem(title: categoryMeals[index].title, iMageUrl: categoryMeals[index].imageUrl,
+              duration: categoryMeals[index].duration,
+              coMplexity: categoryMeals[index].complexity,
+              affordability: categoryMeals[index].affordability,
+              id: categoryMeals[index].id,
+              reMoveIteM: reMoveMeal,
+            );
+        }
+        else{
+          MealItem? mealItem = null;
+          if(categoryMeals[index].isGlutenFree){
+            mealItem = MealItem(title: categoryMeals[index].title, iMageUrl: categoryMeals[index].imageUrl,
+              duration: categoryMeals[index].duration,
+              coMplexity: categoryMeals[index].complexity,
+              affordability: categoryMeals[index].affordability,
+              id: categoryMeals[index].id,
+              reMoveIteM: reMoveMeal,
+            );
+          }
+         if(categoryMeals[index].isLactoseFree){
+           if(mealItem == null) {
+             mealItem = MealItem(title: categoryMeals[index].title,
+               iMageUrl: categoryMeals[index].imageUrl,
+               duration: categoryMeals[index].duration,
+               coMplexity: categoryMeals[index].complexity,
+               affordability: categoryMeals[index].affordability,
+               id: categoryMeals[index].id,
+               reMoveIteM: reMoveMeal,
+             );
+           }
+         }
+          if(categoryMeals[index].isVegetarian){
+            if(mealItem == null) {
+              mealItem = MealItem(title: categoryMeals[index].title,
+                iMageUrl: categoryMeals[index].imageUrl,
+                duration: categoryMeals[index].duration,
+                coMplexity: categoryMeals[index].complexity,
+                affordability: categoryMeals[index].affordability,
+                id: categoryMeals[index].id,
+                reMoveIteM: reMoveMeal,
+              );
+            }
+          }
+          if(categoryMeals[index].isVegan){
+            if(mealItem == null) {
+              mealItem = MealItem(title: categoryMeals[index].title,
+                iMageUrl: categoryMeals[index].imageUrl,
+                duration: categoryMeals[index].duration,
+                coMplexity: categoryMeals[index].complexity,
+                affordability: categoryMeals[index].affordability,
+                id: categoryMeals[index].id,
+                reMoveIteM: reMoveMeal,
+              );
+            }
+          }
+          return mealItem!;
+        }
       },
         itemCount: categoryMeals.length,),
     );
@@ -61,5 +114,8 @@ class CategoriesScreenState extends State<CategoriesMeals>{
     categoryMeals = DUMMY_MEALS.where((Meal){
       return Meal.categories.contains(id);
     }).toList();
+    if(routeArgs["filters"] != null) {
+      filters = routeArgs["filters"] as Map<String, bool>;
+    }
   }
 }

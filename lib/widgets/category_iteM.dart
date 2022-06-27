@@ -9,12 +9,14 @@ class CategoryIteM extends StatelessWidget{
   final String title;
   final Color color;
   final String id;
-  CategoryIteM({required this.title, required this.color, required this.id});
+  Map<String, bool> filters;
+  CategoryIteM({required this.title, required this.color, required this.id, required this.filters});
   @override
   void selectIteM(BuildContext context){
     Navigator.of(context).pushNamed(CategoriesMeals.routeNaMe, arguments: {
       "title" : title,
-      "id" : id
+      "id" : id,
+      "filters" : filters
     });
   }
   Widget build(BuildContext context) {
