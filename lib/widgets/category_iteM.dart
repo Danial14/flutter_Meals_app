@@ -17,6 +17,13 @@ class CategoryIteM extends StatelessWidget{
       "title" : title,
       "id" : id,
       "filters" : filters
+    }).then((value){
+      filters = {
+        "isGlutenFree" : false,
+        "isLactoseFree" : false,
+        "isVeganFree" : false,
+        "isVegetrationFree" : false
+      };
     });
   }
   Widget build(BuildContext context) {

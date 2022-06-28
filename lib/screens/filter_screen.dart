@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/main_drawer.dart';
 
@@ -27,6 +28,40 @@ class FilterScreenState extends State<FilterScreen>{
       },
     );
   }
+  Future<void> _initFilters() async{
+    final sharedPreferences = await SharedPreferences.getInstance();
+    List keys = sharedPreferences.getKeys().toList();
+    if(keys.isNotEmpty){
+      print("keys not eMpty");
+      print(keys[0]);
+      keys.map((key){
+        print(key);
+        switch(key){
+          case "isGlutenFree" :
+            _glutenFree = sharedPreferences.getBool(key)!;
+            print("get gluten " + _glutenFree.toString());
+            break;
+          case "isLactoseFree" :
+            _lactose = sharedPreferences.getBool(key)!;
+            break;
+          case "isVeganFree" :
+            _veganFree = sharedPreferences.getBool(key)!;
+            break;
+          case "isVegetrationFree" :
+            _vegetrian = sharedPreferences.getBool(key)!;
+            break;
+        }
+      }).toList();
+    }
+  }
+  @override
+  initState(){
+    // TODO: implement initState
+    super.initState();
+    _initFilters().whenComplete((){
+
+    });
+  }
   @override
   Widget build(BuildContext context) {
     Map<String, bool> filters = {
@@ -38,6 +73,31 @@ class FilterScreenState extends State<FilterScreen>{
     return Scaffold(
       appBar: AppBar(
         title: Text("Filters"),
+        actions:  [
+          Padding(
+            padding: EdgeInsets.only(right: 15),
+          child: IconButton(
+          icon: Icon(Icons.save),
+            onPressed: () async {
+            final sharedPreferences = await SharedPreferences.getInstance();
+            if(_glutenFree){
+              sharedPreferences.setBool("isGlutenFree", _glutenFree);
+              sharedPreferences.commit();
+              print("share pref gluten " + _glutenFree.toString());
+            }
+            if(_lactose){
+              sharedPreferences.setBool("isLactoseFree", _lactose);
+            }
+            if(_vegetrian){
+              sharedPreferences.setBool("isVeganFree", _vegetrian);
+            }
+            if(_veganFree){
+              sharedPreferences.setBool("isVeganFree", _veganFree);
+            }
+            },
+
+        )
+          )],
       ),
       body: Column(
         children: <Widget>[

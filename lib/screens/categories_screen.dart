@@ -3,7 +3,8 @@ import 'package:flutter_meals_app/dummy_data.dart';
 import '../widgets/category_iteM.dart';
 
 class CategoriesScreen extends StatelessWidget{
-  late final Map<String, bool> filters;
+  final Map<String, bool> filters;
+  CategoriesScreen({required this.filters});
   @override
   Widget build(BuildContext context) {
     return

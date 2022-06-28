@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_meals_app/screens/categories_screen.dart';
+import 'categories_screen.dart';
 import 'package:flutter_meals_app/screens/favouriates_screen.dart';
 import 'package:flutter_meals_app/widgets/main_drawer.dart';
 
@@ -15,7 +15,12 @@ class TabsScreen extends StatefulWidget{
 }
 class TabScreenState extends State<TabsScreen>{
   int _selectedIndex = 0;
-  Map<String, bool>? filters = null;
+  Map<String, bool> filters = {
+    "isGlutenFree" : false,
+    "isLactoseFree" : false,
+    "isVeganFree" : false,
+    "isVegetrationFree" : false
+  };
   void _selectIndex(int index){
     setState(() {
       _selectedIndex = index;
@@ -32,7 +37,7 @@ class TabScreenState extends State<TabsScreen>{
     }
     print(filters);
     final List<Map<String, dynamic>> pages = [
-      {"page" : CategoriesScreen(), "title" : "Categories"},
+      {"page" : CategoriesScreen(filters: this.filters,), "title" : "Categories"},
       {"page" : FavouriatesScreen(), "title" : "Favouriates"}
     ];
     return Scaffold(

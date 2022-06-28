@@ -19,6 +19,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Map<String, bool> filters = {
+      "isGlutenFree" : false,
+      "isLactoseFree" : false,
+      "isVeganFree" : false,
+      "isVegetrationFree" : false
+    };
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -57,13 +63,13 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings){
         print(settings.name);
         return MaterialPageRoute(builder: (context){
-          return CategoriesScreen();
+          return CategoriesScreen(filters: filters,);
         });
       },
       onUnknownRoute: (settings){
         return MaterialPageRoute(
           builder: (context){
-            return CategoriesScreen();
+            return CategoriesScreen(filters: filters,);
           }
         );
       },
