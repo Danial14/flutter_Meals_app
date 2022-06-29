@@ -18,6 +18,15 @@ class FilterScreenState extends State<FilterScreen>{
   bool _veganFree = false;
   bool _vegetrian = false;
   bool currentValue = false;
+  Map<String, bool>? filters;
+  FilterScreenState(){
+    filters = {
+      "isGlutenFree" : false,
+      "isLactoseFree" : false,
+      "isVeganFree" : false,
+      "isVegetrationFree" : false
+    };
+  }
   Widget switchTileBuilder(String title, bool val, String subTitle, Function callBack){
     return SwitchListTile(
       title : Text(title),
@@ -34,24 +43,28 @@ class FilterScreenState extends State<FilterScreen>{
     if(keys.isNotEmpty){
       print("keys not eMpty");
       print(keys[0]);
-      keys.map((key){
-        print(key);
-        switch(key){
-          case "isGlutenFree" :
-            _glutenFree = sharedPreferences.getBool(key)!;
-            print("get gluten " + _glutenFree.toString());
-            break;
-          case "isLactoseFree" :
-            _lactose = sharedPreferences.getBool(key)!;
-            break;
-          case "isVeganFree" :
-            _veganFree = sharedPreferences.getBool(key)!;
-            break;
-          case "isVegetrationFree" :
-            _vegetrian = sharedPreferences.getBool(key)!;
-            break;
+      setState(() {
+        for(int i = 0; i < keys.length; i++){
+          switch(keys[i]){
+            case "isGlutenFree" :
+              _glutenFree = sharedPreferences.getBool(keys[i])!;
+              filters!["isGlutenFree"] = _glutenFree;
+              break;
+            case "isLactoseFree" :
+              _lactose = sharedPreferences.getBool(keys[i])!;
+              filters!["isLactoseFree"] = _lactose;
+              break;
+            case "isVeganFree" :
+              _veganFree = sharedPreferences.getBool(keys[i])!;
+              filters!["isVeganFree"] = _veganFree;
+              break;
+            case "isVegetrationFree" :
+              _vegetrian = sharedPreferences.getBool(keys[i])!;
+              filters!["isVegetrationFree"] = _vegetrian;
+              break;
+          }
         }
-      }).toList();
+      });
     }
   }
   @override
@@ -64,12 +77,6 @@ class FilterScreenState extends State<FilterScreen>{
   }
   @override
   Widget build(BuildContext context) {
-    Map<String, bool> filters = {
-      "isGlutenFree" : false,
-      "isLactoseFree" : false,
-      "isVeganFree" : false,
-      "isVegetrationFree" : false
-    };
     return Scaffold(
       appBar: AppBar(
         title: Text("Filters"),
@@ -89,7 +96,7 @@ class FilterScreenState extends State<FilterScreen>{
               sharedPreferences.setBool("isLactoseFree", _lactose);
             }
             if(_vegetrian){
-              sharedPreferences.setBool("isVeganFree", _vegetrian);
+              sharedPreferences.setBool("isVegetrationFree", _vegetrian);
             }
             if(_veganFree){
               sharedPreferences.setBool("isVeganFree", _veganFree);
@@ -109,70 +116,70 @@ class FilterScreenState extends State<FilterScreen>{
             child: ListView(
               children: <Widget>[
                 switchTileBuilder("Gluten free", _glutenFree, "Only include gluten-free", (newValue){
-                 Map<String, bool>? filters = widget.drawer.getFilters();
                   if(newValue){
                     setState(() {
                       filters!["isGlutenFree"] = newValue;
-                      widget.drawer.recieveFilter(filters);
+                      widget.drawer.recieveFilter(this.filters!);
                       _glutenFree = newValue;
                     });
                   }
                   else{
                     setState(() {
                       filters!["isGlutenFree"] = newValue;
-                      widget.drawer.recieveFilter(filters);
+                      widget.drawer.recieveFilter(filters!);
                       _glutenFree = newValue;
+                      _reMoveIteM("isGlutenFree");
                     });
                   }
                 }),
                 switchTileBuilder("Lactose free", _lactose, "Only lactose free", (newValue){
-                  Map<String, bool>? filters = widget.drawer.getFilters();
                   if(newValue){
                     setState(() {
                       filters!["isLactoseFree"] = newValue;
-                      widget.drawer.recieveFilter(filters);
+                      widget.drawer.recieveFilter(filters!);
                       _lactose = newValue;
                     });
                   }
                   else{
                     setState(() {
                       filters!["isLactoseFree"] = newValue;
-                      widget.drawer.recieveFilter(filters);
+                      widget.drawer.recieveFilter(filters!);
                       _lactose = newValue;
+                      _reMoveIteM("isLactoseFree");
                     });
                   }
                 }),
                 switchTileBuilder("Vegen free", _veganFree, "Only vegen free", (newValue){
-                  Map<String, bool>? filters = widget.drawer.getFilters();
                   if(newValue){
                     setState(() {
                       filters!["isVeganFree"] = newValue;
-                      widget.drawer.recieveFilter(filters);
+                      widget.drawer.recieveFilter(filters!);
                       _veganFree = newValue;
                     });
                   }
                   else{
                     setState(() {
                       filters!["isVeganFree"] = newValue;
-                      widget.drawer.recieveFilter(filters);
+                      widget.drawer.recieveFilter(filters!);
                       _veganFree = newValue;
+                      _reMoveIteM("isVeganFree");
                     });
                   }
                 }),
                 switchTileBuilder("Vegetrian free", _vegetrian, "Only vegration free", (newValue){
-                  Map<String, bool>? filters = widget.drawer.getFilters();
-                  if(_vegetrian){
+                  if(newValue){
                     setState(() {
                       filters!["isVegetrationFree"] = newValue;
-                      widget.drawer.recieveFilter(filters);
+                      widget.drawer.recieveFilter(filters!);
                       _vegetrian = newValue;
                     });
                   }
                   else{
                     setState(() {
                       filters!["isVegetrationFree"] = newValue;
-                      widget.drawer.recieveFilter(filters);
+                      widget.drawer.recieveFilter(filters!);
                       _vegetrian = newValue;
+                      _reMoveIteM("isVegetrationFree");
                     });
                   }
                 })
@@ -183,5 +190,12 @@ class FilterScreenState extends State<FilterScreen>{
       ),
       drawer: widget.drawer as MainDrawer,
     );
+  }
+
+  void _reMoveIteM(String key) async{
+    final sharedPref = await SharedPreferences.getInstance();
+    if(sharedPref.containsKey(key)){
+      sharedPref.remove(key);
+    }
   }
 }

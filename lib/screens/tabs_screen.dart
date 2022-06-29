@@ -15,7 +15,7 @@ class TabsScreen extends StatefulWidget{
 }
 class TabScreenState extends State<TabsScreen>{
   int _selectedIndex = 0;
-  Map<String, bool> filters = {
+  static Map<String, bool> filters = {
     "isGlutenFree" : false,
     "isLactoseFree" : false,
     "isVeganFree" : false,
@@ -26,8 +26,8 @@ class TabScreenState extends State<TabsScreen>{
       _selectedIndex = index;
     });
   }
-  set setFilters(Map<String, bool> filters){
-    this.filters = filters;
+  set setFilters(Map<String, bool> filter){
+    filters = filter;
   }
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class TabScreenState extends State<TabsScreen>{
     }
     print(filters);
     final List<Map<String, dynamic>> pages = [
-      {"page" : CategoriesScreen(filters: this.filters,), "title" : "Categories"},
+      {"page" : CategoriesScreen(filters: TabScreenState.filters,), "title" : "Categories"},
       {"page" : FavouriatesScreen(), "title" : "Favouriates"}
     ];
     return Scaffold(

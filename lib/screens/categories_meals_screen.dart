@@ -18,7 +18,7 @@ class CategoriesScreenState extends State<CategoriesMeals>{
   late String title;
   late String id;
   late List<Meal> categoryMeals;
-  late Map<String, bool> filters;
+  late Map<String, bool> _filters;
   /*@override
   void initState() {
     super.initState();
@@ -56,60 +56,45 @@ class CategoriesScreenState extends State<CategoriesMeals>{
     );
   }
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("categories sccreen");
+  }
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    categoryMeals = [];
-    print("didChangeDependencies() called");
     final routeArgs = ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
     title = routeArgs["title"]! as String;
     id = routeArgs["id"]! as String;
-    filters = routeArgs["filters"] as Map<String, bool>;
-    if((filters["isGlutenFree"] == false && filters["isLactoseFree"] == false && filters["isVeganFree"] == false && filters["isVegetrationFree"] == false) && categoryMeals.length == 0) {
+    _filters = routeArgs["filters"] as Map<String, bool>;
+    categoryMeals = categoryMeals = DUMMY_MEALS.where((Meal) {
+      return Meal.categories.contains(id);
+    }).toList();
+    //categoryMeals = [];
+    print("didChangeDependencies() called");
+    if((_filters["isGlutenFree"] == false && _filters["isLactoseFree"] == false && _filters["isVeganFree"] == false && _filters["isVegetrationFree"] == false)) {
       categoryMeals = DUMMY_MEALS.where((Meal) {
         return Meal.categories.contains(id);
       }).toList();
     }
     else {
-      if (categoryMeals.length > 0) {
         categoryMeals = categoryMeals.where((iteM) {
           bool result = false;
-          if (iteM.isLactoseFree && filters["isLactoseFree"]!) {
+          if (iteM.isLactoseFree && _filters["isLactoseFree"]!) {
             result = true;
           }
-          if (iteM.isGlutenFree && filters["isGlutenFree"]!) {
+          if (iteM.isGlutenFree && _filters["isGlutenFree"]!) {
             result = true;
           }
-          if (iteM.isVegan && filters["isVeganFree"]!) {
+          if (iteM.isVegan && _filters["isVeganFree"]!) {
             result = true;
           }
-          if (iteM.isVegetarian && filters["isVegetrationFree"]!) {
-            result = true;
-          }
-          return result;
-        }).toList();
-      }
-      else if(categoryMeals.length == 0){
-        categoryMeals = DUMMY_MEALS.where((Meal) {
-          return Meal.categories.contains(id);
-        }).toList();
-        categoryMeals = categoryMeals.where((iteM){
-          bool result = false;
-          if (iteM.isLactoseFree && filters["isLactoseFree"]!) {
-            result = true;
-          }
-          if (iteM.isGlutenFree && filters["isGlutenFree"]!) {
-            result = true;
-          }
-          if (iteM.isVegan && filters["isVeganFree"]!) {
-            result = true;
-          }
-          if (iteM.isVegetarian && filters["isVegetrationFree"]!) {
+          if (iteM.isVegetarian && _filters["isVegetrationFree"]!) {
             result = true;
           }
           return result;
         }).toList();
-      }
     }
   }
 }

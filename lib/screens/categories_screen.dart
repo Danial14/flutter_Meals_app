@@ -7,6 +7,7 @@ class CategoriesScreen extends StatelessWidget{
   CategoriesScreen({required this.filters});
   @override
   Widget build(BuildContext context) {
+    print("cate");
     return
     GridView(
       padding: const EdgeInsets.all(25),
