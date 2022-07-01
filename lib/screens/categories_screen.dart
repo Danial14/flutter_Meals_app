@@ -3,8 +3,6 @@ import 'package:flutter_meals_app/dummy_data.dart';
 import '../widgets/category_iteM.dart';
 
 class CategoriesScreen extends StatelessWidget{
-  final Map<String, bool> filters;
-  CategoriesScreen({required this.filters});
   @override
   Widget build(BuildContext context) {
     print("cate");
@@ -18,7 +16,7 @@ class CategoriesScreen extends StatelessWidget{
       mainAxisSpacing: 20,
     ),
     children: DUMMY_CATEGORIES.map((category){
-      return CategoryIteM(title: category.title, color: category.color, id: category.id, filters: filters,);
+      return CategoryIteM(title: category.title, color: category.color, id: category.id,);
     }).toList(),
     );
   }

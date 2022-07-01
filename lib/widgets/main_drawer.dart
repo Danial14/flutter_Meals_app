@@ -3,17 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_meals_app/screens/filter_screen.dart';
 
-class MainDrawer extends StatelessWidget implements DrawerCallBack{
-  Map<String, bool> _filters = {
-    "isGlutenFree" : false,
-    "isLactoseFree" : false,
-    "isVeganFree" : false,
-    "isVegetrationFree" : false
-  };
-
-  set filters(Map<String, bool> filters){
-    _filters = filters;
-  }
+class MainDrawer extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -44,7 +34,7 @@ class MainDrawer extends StatelessWidget implements DrawerCallBack{
             ),
             ),
             onTap: (){
-              Navigator.of(context).pushReplacementNamed("/", arguments: _filters);
+              Navigator.of(context).pushReplacementNamed("/");
             },
           ),
           ListTile(
@@ -69,19 +59,4 @@ class MainDrawer extends StatelessWidget implements DrawerCallBack{
     );
   }
 
-  @override
-  void recieveFilter(Map<String, bool> filt) {
-    print("filt is ");
-    print(filt);
-    _filters = filt;
-  }
-  @override
-  Map<String, bool>? getFilters() {
-    return _filters;
-  }
-
-}
-class DrawerCallBack{
-  void recieveFilter(Map<String, bool> filters){}
-  Map<String, bool>? getFilters(){}
 }

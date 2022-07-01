@@ -2,16 +2,20 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_meals_app/dummy_data.dart';
+import 'package:flutter_meals_app/models/DataHolder.dart';
 
 class MealDetail extends StatelessWidget{
   static String routeNaMe = "/Meals_details";
   late String _title;
   late String _id;
+  late final _isFavouriate;
+
   @override
   Widget build(BuildContext context) {
-    Map<String, String> arguMents = ModalRoute.of(context)?.settings.arguments as Map<String, String>;
-    _title = arguMents["title"]!;
-    _id = arguMents["id"]!;
+    Map<String, Object> arguMents = ModalRoute.of(context)?.settings.arguments as Map<String, Object>;
+    _title = arguMents["title"]! as String;
+    _id = arguMents["id"]! as String;
+    _isFavouriate = arguMents["isFavouriate"]! as bool;
     final selectedMeal = DUMMY_MEALS.firstWhere((Meal){
       return Meal.id == _id;
     });
@@ -98,15 +102,15 @@ class MealDetail extends StatelessWidget{
           )
       ]
     ),
-        floatingActionButton: FloatingActionButton(
+      floatingActionButton: this._isFavouriate ? FloatingActionButton(
         child: Icon(
-        Icons.delete
+        Icons.favorite
     ),
     onPressed: (){
-         Navigator.of(context).pop(_id);
+          DataHolder.getInstance().setFavouriate(_id);
     }
     ,
-    ),
+    ) : null,
     );
   }
 }

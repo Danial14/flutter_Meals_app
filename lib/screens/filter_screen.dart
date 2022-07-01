@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/DataHolder.dart';
 import '../widgets/main_drawer.dart';
 
 class FilterScreen extends StatefulWidget{
   static const routeNaMe = "/filters";
-  late DrawerCallBack drawer;
-  FilterScreen({required this.drawer});
   @override
   State<FilterScreen> createState() {
+    print("filterscreenstate");
     return FilterScreenState();
   }
 }
@@ -18,15 +18,6 @@ class FilterScreenState extends State<FilterScreen>{
   bool _veganFree = false;
   bool _vegetrian = false;
   bool currentValue = false;
-  Map<String, bool>? filters;
-  FilterScreenState(){
-    filters = {
-      "isGlutenFree" : false,
-      "isLactoseFree" : false,
-      "isVeganFree" : false,
-      "isVegetrationFree" : false
-    };
-  }
   Widget switchTileBuilder(String title, bool val, String subTitle, Function callBack){
     return SwitchListTile(
       title : Text(title),
@@ -46,21 +37,21 @@ class FilterScreenState extends State<FilterScreen>{
       setState(() {
         for(int i = 0; i < keys.length; i++){
           switch(keys[i]){
-            case "isGlutenFree" :
+            case DataHolder.isGlutenFreeKey :
               _glutenFree = sharedPreferences.getBool(keys[i])!;
-              filters!["isGlutenFree"] = _glutenFree;
+              DataHolder.getInstance().setFiltersIteM(DataHolder.isGlutenFreeKey, _glutenFree);
               break;
-            case "isLactoseFree" :
+            case DataHolder.isLactoseFree :
               _lactose = sharedPreferences.getBool(keys[i])!;
-              filters!["isLactoseFree"] = _lactose;
+              DataHolder.getInstance().setFiltersIteM(DataHolder.isLactoseFree, _lactose);
               break;
-            case "isVeganFree" :
+            case DataHolder.isVeganFree :
               _veganFree = sharedPreferences.getBool(keys[i])!;
-              filters!["isVeganFree"] = _veganFree;
+              DataHolder.getInstance().setFiltersIteM(DataHolder.isVeganFree, _veganFree);
               break;
-            case "isVegetrationFree" :
+            case DataHolder.isVegetrationFree :
               _vegetrian = sharedPreferences.getBool(keys[i])!;
-              filters!["isVegetrationFree"] = _vegetrian;
+              DataHolder.getInstance().setFiltersIteM(DataHolder.isVegetrationFree, _vegetrian);
               break;
           }
         }
@@ -71,9 +62,7 @@ class FilterScreenState extends State<FilterScreen>{
   initState(){
     // TODO: implement initState
     super.initState();
-    _initFilters().whenComplete((){
-
-    });
+    _initFilters();
   }
   @override
   Widget build(BuildContext context) {
@@ -88,18 +77,17 @@ class FilterScreenState extends State<FilterScreen>{
             onPressed: () async {
             final sharedPreferences = await SharedPreferences.getInstance();
             if(_glutenFree){
-              sharedPreferences.setBool("isGlutenFree", _glutenFree);
-              sharedPreferences.commit();
+              sharedPreferences.setBool(DataHolder.isGlutenFreeKey, _glutenFree);
               print("share pref gluten " + _glutenFree.toString());
             }
             if(_lactose){
-              sharedPreferences.setBool("isLactoseFree", _lactose);
+              sharedPreferences.setBool(DataHolder.isLactoseFree, _lactose);
             }
             if(_vegetrian){
-              sharedPreferences.setBool("isVegetrationFree", _vegetrian);
+              sharedPreferences.setBool(DataHolder.isVegetrationFree, _vegetrian);
             }
             if(_veganFree){
-              sharedPreferences.setBool("isVeganFree", _veganFree);
+              sharedPreferences.setBool(DataHolder.isVeganFree, _veganFree);
             }
             },
 
@@ -118,68 +106,60 @@ class FilterScreenState extends State<FilterScreen>{
                 switchTileBuilder("Gluten free", _glutenFree, "Only include gluten-free", (newValue){
                   if(newValue){
                     setState(() {
-                      filters!["isGlutenFree"] = newValue;
-                      widget.drawer.recieveFilter(this.filters!);
                       _glutenFree = newValue;
+                      DataHolder.getInstance().setFiltersIteM(DataHolder.isGlutenFreeKey, _glutenFree);
                     });
                   }
                   else{
                     setState(() {
-                      filters!["isGlutenFree"] = newValue;
-                      widget.drawer.recieveFilter(filters!);
                       _glutenFree = newValue;
-                      _reMoveIteM("isGlutenFree");
+                      DataHolder.getInstance().setFiltersIteM(DataHolder.isGlutenFreeKey, _glutenFree);
+                      _reMoveIteM(DataHolder.isGlutenFreeKey);
                     });
                   }
                 }),
                 switchTileBuilder("Lactose free", _lactose, "Only lactose free", (newValue){
                   if(newValue){
                     setState(() {
-                      filters!["isLactoseFree"] = newValue;
-                      widget.drawer.recieveFilter(filters!);
                       _lactose = newValue;
+                      DataHolder.getInstance().setFiltersIteM(DataHolder.isLactoseFree, _lactose);
                     });
                   }
                   else{
                     setState(() {
-                      filters!["isLactoseFree"] = newValue;
-                      widget.drawer.recieveFilter(filters!);
                       _lactose = newValue;
-                      _reMoveIteM("isLactoseFree");
+                      DataHolder.getInstance().setFiltersIteM(DataHolder.isLactoseFree, _lactose);
+                      _reMoveIteM(DataHolder.isLactoseFree);
                     });
                   }
                 }),
                 switchTileBuilder("Vegen free", _veganFree, "Only vegen free", (newValue){
                   if(newValue){
                     setState(() {
-                      filters!["isVeganFree"] = newValue;
-                      widget.drawer.recieveFilter(filters!);
                       _veganFree = newValue;
+                      DataHolder.getInstance().setFiltersIteM(DataHolder.isVeganFree, newValue);
                     });
                   }
                   else{
                     setState(() {
-                      filters!["isVeganFree"] = newValue;
-                      widget.drawer.recieveFilter(filters!);
                       _veganFree = newValue;
-                      _reMoveIteM("isVeganFree");
+                      DataHolder.getInstance().setFiltersIteM(DataHolder.isVeganFree, newValue);
+                      _reMoveIteM(DataHolder.isVeganFree);
                     });
                   }
                 }),
                 switchTileBuilder("Vegetrian free", _vegetrian, "Only vegration free", (newValue){
                   if(newValue){
                     setState(() {
-                      filters!["isVegetrationFree"] = newValue;
-                      widget.drawer.recieveFilter(filters!);
                       _vegetrian = newValue;
+                      DataHolder.getInstance().setFiltersIteM(DataHolder.isVegetrationFree, newValue);
                     });
                   }
                   else{
                     setState(() {
-                      filters!["isVegetrationFree"] = newValue;
-                      widget.drawer.recieveFilter(filters!);
                       _vegetrian = newValue;
-                      _reMoveIteM("isVegetrationFree");
+                      DataHolder.getInstance().setFiltersIteM(DataHolder.isVegetrationFree, newValue);
+                      _reMoveIteM(DataHolder.isVegetrationFree);
                     });
                   }
                 })
@@ -188,7 +168,7 @@ class FilterScreenState extends State<FilterScreen>{
           )
         ],
       ),
-      drawer: widget.drawer as MainDrawer,
+      drawer: MainDrawer(),
     );
   }
 

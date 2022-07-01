@@ -15,29 +15,15 @@ class TabsScreen extends StatefulWidget{
 }
 class TabScreenState extends State<TabsScreen>{
   int _selectedIndex = 0;
-  static Map<String, bool> filters = {
-    "isGlutenFree" : false,
-    "isLactoseFree" : false,
-    "isVeganFree" : false,
-    "isVegetrationFree" : false
-  };
   void _selectIndex(int index){
     setState(() {
       _selectedIndex = index;
     });
   }
-  set setFilters(Map<String, bool> filter){
-    filters = filter;
-  }
   @override
   Widget build(BuildContext context) {
-    Object? filters = ModalRoute.of(context)?.settings.arguments;
-    if(filters != null){
-      setFilters = filters as Map<String, bool>;
-    }
-    print(filters);
     final List<Map<String, dynamic>> pages = [
-      {"page" : CategoriesScreen(filters: TabScreenState.filters,), "title" : "Categories"},
+      {"page" : CategoriesScreen(), "title" : "Categories"},
       {"page" : FavouriatesScreen(), "title" : "Favouriates"}
     ];
     return Scaffold(

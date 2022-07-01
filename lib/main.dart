@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_meals_app/screens/filter_screen.dart';
-import 'package:flutter_meals_app/screens/meals_detail_screen.dart';
+import './screens/meals_detail_screen.dart';
 import 'package:flutter_meals_app/screens/tabs_screen.dart';
-import 'package:flutter_meals_app/widgets/main_drawer.dart';
+import 'models/DataHolder.dart';
 import 'screens/categories_screen.dart';
 
 import 'screens/categories_meals_screen.dart';
@@ -19,12 +19,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    Map<String, bool> filters = {
-      "isGlutenFree" : false,
-      "isLactoseFree" : false,
-      "isVeganFree" : false,
-      "isVegetrationFree" : false
-    };
+    DataHolder.getInstance().setInitialFilters();
+    DataHolder.getInstance().setInitialFavouriatesRecipes();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -57,19 +53,19 @@ class MyApp extends StatelessWidget {
           return MealDetail();
         },
         FilterScreen.routeNaMe : (context){
-          return FilterScreen(drawer: MainDrawer(),);
+          return FilterScreen();
         }
     },
       onGenerateRoute: (settings){
         print(settings.name);
         return MaterialPageRoute(builder: (context){
-          return CategoriesScreen(filters: filters,);
+          return CategoriesScreen();
         });
       },
       onUnknownRoute: (settings){
         return MaterialPageRoute(
           builder: (context){
-            return CategoriesScreen(filters: filters,);
+            return CategoriesScreen();
           }
         );
       },

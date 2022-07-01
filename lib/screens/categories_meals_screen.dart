@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_meals_app/dummy_data.dart';
-import 'package:flutter_meals_app/models/meals.dart';
-
+import '../models/meals.dart';
 import '../dummy_data.dart';
+import '../models/DataHolder.dart';
 import '../widgets/meal_item.dart';
 
 class CategoriesMeals extends StatefulWidget{
@@ -18,17 +18,6 @@ class CategoriesScreenState extends State<CategoriesMeals>{
   late String title;
   late String id;
   late List<Meal> categoryMeals;
-  late Map<String, bool> _filters;
-  /*@override
-  void initState() {
-    super.initState();
-    final routeArgs = ModalRoute.of(context)!.settings.arguments as Map<String, String>;
-    title = routeArgs["title"]!;
-    id = routeArgs["id"]!;
-    categoryMeals = DUMMY_MEALS.where((Meal){
-      return Meal.categories.contains(id);
-    }).toList() as List<Meal>;
-  }*/
   void reMoveMeal(String MealId){
     setState(() {
       categoryMeals.removeWhere((element){
@@ -49,7 +38,7 @@ class CategoriesScreenState extends State<CategoriesMeals>{
               coMplexity: categoryMeals[index].complexity,
               affordability: categoryMeals[index].affordability,
               id: categoryMeals[index].id,
-              reMoveIteM: reMoveMeal,
+              isFavouriate: true,
             );
       },
         itemCount: categoryMeals.length,),
@@ -64,33 +53,30 @@ class CategoriesScreenState extends State<CategoriesMeals>{
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final routeArgs = ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
-    title = routeArgs["title"]! as String;
-    id = routeArgs["id"]! as String;
-    _filters = routeArgs["filters"] as Map<String, bool>;
-    categoryMeals = categoryMeals = DUMMY_MEALS.where((Meal) {
+    final routeArgs = ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+    title = routeArgs["title"]!;
+    id = routeArgs["id"]!;
+    print("didChangeDependencies() called");
+    Map<String, bool> filters = DataHolder.getInstance().getFilters;
+    categoryMeals = DUMMY_MEALS.where((Meal) {
       return Meal.categories.contains(id);
     }).toList();
-    //categoryMeals = [];
-    print("didChangeDependencies() called");
-    if((_filters["isGlutenFree"] == false && _filters["isLactoseFree"] == false && _filters["isVeganFree"] == false && _filters["isVegetrationFree"] == false)) {
-      categoryMeals = DUMMY_MEALS.where((Meal) {
-        return Meal.categories.contains(id);
-      }).toList();
+    if((filters[DataHolder.isGlutenFreeKey] == false && filters[DataHolder.isLactoseFree] == false && filters[DataHolder.isVeganFree] == false && filters[DataHolder.isVegetrationFree] == false)) {
+      return;
     }
     else {
         categoryMeals = categoryMeals.where((iteM) {
           bool result = false;
-          if (iteM.isLactoseFree && _filters["isLactoseFree"]!) {
+          if (iteM.isLactoseFree && filters[DataHolder.isLactoseFree]!) {
             result = true;
           }
-          if (iteM.isGlutenFree && _filters["isGlutenFree"]!) {
+          if (iteM.isGlutenFree && filters[DataHolder.isGlutenFreeKey]!) {
             result = true;
           }
-          if (iteM.isVegan && _filters["isVeganFree"]!) {
+          if (iteM.isVegan && filters[DataHolder.isVeganFree]!) {
             result = true;
           }
-          if (iteM.isVegetarian && _filters["isVegetrationFree"]!) {
+          if (iteM.isVegetarian && filters[DataHolder.isVegetrationFree]!) {
             result = true;
           }
           return result;
